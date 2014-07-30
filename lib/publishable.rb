@@ -1,8 +1,11 @@
   module Publishable
-
+    
+    def self.included(base)
+      base.after_save :validate_publishing_chain
+    end
     
     def notify_publishability_change!(first_link = true)
-      write_attribute(:publishable_flag, publishable_without_caching?)
+      write_attribute(:publishable_flag, publishable?)
       ActiveRecord::Base.connection.execute("update #{self.class.table_name} set publishable_flag = #{publishable_flag} where id = #{id}")
       notify_publishability_upchain! if respond_to?(:notify_publishability_upchain!)
     end
@@ -12,10 +15,6 @@
     end
 
     def publishable?
-      publishable_flag.nil? ? publishable_without_caching? : publishable_flag
-    end
-
-    def publishable_without_caching?
       check_publishability().empty?
     end
 
@@ -32,16 +31,11 @@
       raise Exception.new("check_publishing_rules needs to be redefined by including class: #{self.class}")
     end
 
-    # validation: trigger by calling enforce_publishing_validation! on model
-    def enforce_publishing_validation!
-      @enforce_publishing_validation = true
+
+    def validate_publishability
+      notify_publishability_change!(true)
     end
 
-    def validate_publishing_chain
-      if @enforce_publishing_validation
-        notify_publishability_change!(true)
-      end
-    end
   end
 # module Publishable
 

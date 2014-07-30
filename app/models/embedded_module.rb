@@ -7,14 +7,14 @@ class EmbeddedModule < ActiveRecord::Base
   has_many :video_elements, through: :element_types, source: :element, source_type: 'Video'
   has_many :image_elements, through: :element_types, source: :element, source_type: 'Image'
   has_many :audio_elements, through: :element_types, source: :element, source_type: 'Audio'
-  after_save :validate_publishing_chain
 
 
-  def check_publishing_rules
+
+  def validate_publishability
     publishing_errors.add(:name, 'must not be blank') if name.blank?
     publishing_errors.add(:section_id, 'must exist')  unless section
     publishing_errors.add(:base, "Must have at least one element") if elements.length.zero?
-    publishing_errors.add(:base, "One or more elements are unpublishable") unless elements.all?(&:publishable_without_caching?)
+    publishing_errors.add(:base, "One or more elements are unpublishable") unless elements.all?(&:publishable?)
   end
 
   def notify_publishability_upchain!

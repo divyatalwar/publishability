@@ -3,13 +3,13 @@ class Section < ActiveRecord::Base
   belongs_to :page
   has_many :modules, class_name: 'EmbeddedModule',  dependent: :destroy
 
-  after_save :validate_publishing_chain
+  
 
-  def check_publishing_rules
+  def validate_publishability
     publishing_errors.add(:name, 'must not be blank') if name.blank?
     publishing_errors.add(:page_id, 'must exist') unless page
     publishing_errors.add(:base, "Must have at least one modules") if modules.length.zero?
-    publishing_errors.add(:base, "One or more modules are unpublishable") unless modules.all?(&:publishable_without_caching?)
+    publishing_errors.add(:base, "One or more modules are unpublishable") unless modules.all?(&:publishable?)
   end
   
   def notify_publishability_upchain!

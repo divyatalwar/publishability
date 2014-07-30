@@ -3,7 +3,7 @@ class Video <  ActiveRecord::Base
   has_one :element_type, as: :element
   has_one :module, through: :element_type
 
-  def check_publishing_rules
+  def validate_publishability
     publishing_errors.add(:url, 'must not be blank')  if url.blank?
   end
 

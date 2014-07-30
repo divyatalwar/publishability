@@ -3,7 +3,9 @@ class Text <  ActiveRecord::Base
   has_one :element_type, as: :element
   has_one :module, through: :element_type
 
-  def check_publishing_rules
+
+
+  def validate_publishability
     publishing_errors.add(:content, 'must not be blank')  if content.blank?
   end
 
