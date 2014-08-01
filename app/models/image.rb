@@ -2,7 +2,7 @@ class Image <  ActiveRecord::Base
   has_one :element_type, as: :element
   has_one :module, through: :element_type
 
-  def validate_publishability
+  def check_publishing_rules
     publishing_errors.add(:alt, 'must not be blank')  if alt.blank?
     publishing_errors.add(:url, 'must not be blank')  if url.blank?
   end

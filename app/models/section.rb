@@ -5,7 +5,7 @@ class Section < ActiveRecord::Base
 
   
 
-  def validate_publishability
+  def check_publishing_rules
     publishing_errors.add(:name, 'must not be blank') if name.blank?
     publishing_errors.add(:page_id, 'must exist') unless page
     publishing_errors.add(:base, "Must have at least one modules") if modules.length.zero?

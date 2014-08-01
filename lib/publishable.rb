@@ -1,9 +1,5 @@
   module Publishable
     
-    def self.included(base)
-      base.after_save :validate_publishing_chain
-    end
-    
     def notify_publishability_change!(first_link = true)
       write_attribute(:publishable_flag, publishable?)
       ActiveRecord::Base.connection.execute("update #{self.class.table_name} set publishable_flag = #{publishable_flag} where id = #{id}")

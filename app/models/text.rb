@@ -5,7 +5,7 @@ class Text <  ActiveRecord::Base
 
 
 
-  def validate_publishability
+  def check_publishing_rules
     publishing_errors.add(:content, 'must not be blank')  if content.blank?
   end
 

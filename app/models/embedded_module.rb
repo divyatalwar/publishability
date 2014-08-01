@@ -10,7 +10,7 @@ class EmbeddedModule < ActiveRecord::Base
 
 
 
-  def validate_publishability
+  def check_publishing_rules
     publishing_errors.add(:name, 'must not be blank') if name.blank?
     publishing_errors.add(:section_id, 'must exist')  unless section
     publishing_errors.add(:base, "Must have at least one element") if elements.length.zero?
