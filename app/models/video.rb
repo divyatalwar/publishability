@@ -10,4 +10,5 @@ class Video <  ActiveRecord::Base
   def notify_publishability_upchain!
     self.module.notify_publishability_change! if self.module
   end
+  
 end

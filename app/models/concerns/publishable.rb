@@ -1,8 +1,12 @@
   module Publishable
+    extend ActiveSupport::Concern
     
     def notify_publishability_change!
+      #This line writes the status of the publishability on the calling instance so that the instance remains in the consistent state whenever reffered 
       write_attribute(:publishable_flag, publishable?)
+      #This makes the changes listed above at the backend
       ActiveRecord::Base.connection.execute("update #{self.class.table_name} set publishable_flag = #{publishable_flag} where id = #{id}")
+      # This calls the current method on its immediate parent to check for publishability
       notify_publishability_upchain! if respond_to?(:notify_publishability_upchain!)
     end
     

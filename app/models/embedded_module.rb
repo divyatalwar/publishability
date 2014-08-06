@@ -1,13 +1,13 @@
 class EmbeddedModule < ActiveRecord::Base
   self.table_name ='modules'
   include Publishable
+  
   belongs_to :section
   has_many :element_types, foreign_key: :module_id
   has_many :text_elements, through: :element_types, source: :element, source_type: 'Text'
   has_many :video_elements, through: :element_types, source: :element, source_type: 'Video'
   has_many :image_elements, through: :element_types, source: :element, source_type: 'Image'
   has_many :audio_elements, through: :element_types, source: :element, source_type: 'Audio'
-
 
 
   def check_publishing_rules
@@ -24,4 +24,5 @@ class EmbeddedModule < ActiveRecord::Base
   def elements
     text_elements + audio_elements + video_elements + image_elements
   end
+
 end

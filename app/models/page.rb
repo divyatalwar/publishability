@@ -3,7 +3,6 @@ class Page < ActiveRecord::Base
   belongs_to :site
   has_many :sections, dependent: :destroy
   
-
   def check_publishing_rules_without_sections
     publishing_errors.add(:name, 'must not be blank') if name.blank?
     publishing_errors.add(:page_title, 'must not be blank') if page_title.blank?
@@ -11,16 +10,15 @@ class Page < ActiveRecord::Base
     publishing_errors.add(:description, 'must not be blank') if description.blank?
   end
 
-
-
   def check_publishing_rules
     check_publishing_rules_without_sections
     publishing_errors.add(:site_id, 'must exist')  unless site
-    publishing_errors.add(:base, "Must have at least one section") if sections.length.zero?
-    publishing_errors.add(:base, "One or more sections are unpublishable") unless sections.all?(&:publishable?)
+    publishing_errors.add(:base, "must have at least one section") if sections.length.zero?
+    publishing_errors.add(:base, "one or more sections are unpublishable") unless sections.all?(&:publishable?)
   end
 
   def notify_publishability_upchain!
     site.notify_publishability_change! if site
   end
+
 end
