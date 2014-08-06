@@ -1,4 +1,5 @@
 class Image <  ActiveRecord::Base
+  include Publishable
   has_one :element_type, as: :element
   has_one :module, through: :element_type
 
