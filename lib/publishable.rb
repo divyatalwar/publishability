@@ -1,6 +1,6 @@
   module Publishable
     
-    def notify_publishability_change!(first_link = true)
+    def notify_publishability_change!
       write_attribute(:publishable_flag, publishable?)
       ActiveRecord::Base.connection.execute("update #{self.class.table_name} set publishable_flag = #{publishable_flag} where id = #{id}")
       notify_publishability_upchain! if respond_to?(:notify_publishability_upchain!)
@@ -11,7 +11,7 @@
     end
 
     def publishable?
-      check_publishability().empty?
+      check_publishability.empty?
     end
 
     def check_publishability
@@ -26,7 +26,7 @@
 
 
     def validate_publishability
-      notify_publishability_change!(true)
+      notify_publishability_change!
     end
 
   end
